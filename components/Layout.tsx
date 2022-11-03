@@ -11,7 +11,7 @@ export default function Layout({
   return (
     <>
       <Head>
-        <title>{title ? title : "Cisab"}</title>
+        <title>{title ? title : "Czar+"}</title>
         <meta
           name="description"
           content="Cisab App. Created with ❤ by czar.dev"
