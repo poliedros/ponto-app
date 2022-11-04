@@ -52,10 +52,16 @@ const Home: NextPage = () => {
     return today.getHours() + ":" + minutes + ":" + seconds;
   };
 
+  function upperCaseFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   return (
     <div>
       <Layout>
-        <h4>{greetings(new Date())}, Carlos</h4>
+        <h4>
+          {greetings(new Date())}, {upperCaseFirstLetter(user.username)}
+        </h4>
         <h5>Agora são: {nowTime(date)}</h5>
         <div className="grid content-center py-4">
           {show ? (

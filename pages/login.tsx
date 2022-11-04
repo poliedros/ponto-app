@@ -5,7 +5,7 @@ import { Spinner } from "components/Spinner";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { mutateUser } = useUser({
@@ -21,7 +21,7 @@ export default function Login() {
 
     const data = await fetch("/api/login", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     }).finally(() => setLoading(false));
 
     if (data.status == 500) {
@@ -41,14 +41,14 @@ export default function Login() {
             className="block text-grey-darker text-sm font-bold mb-2"
             htmlFor="username"
           >
-            Email
+            User
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-            id="email"
+            id="username"
             type="text"
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div className="mb-6">
