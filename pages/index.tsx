@@ -35,9 +35,21 @@ const Home: NextPage = () => {
   };
 
   const nowTime = (today: Date) => {
-    return (
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
-    );
+    let minutes = "00";
+    let seconds = "00";
+
+    if (today.getSeconds() < 10) {
+      seconds = "0" + today.getSeconds();
+    } else {
+      seconds = `${today.getSeconds()}`;
+    }
+    if (today.getMinutes() < 10) {
+      minutes = "0" + today.getMinutes();
+    } else {
+      minutes = `${today.getMinutes()}`;
+    }
+
+    return today.getHours() + ":" + minutes + ":" + seconds;
   };
 
   return (
