@@ -1,12 +1,16 @@
 import Layout from "components/Layout";
+import { Spinner } from "components/Spinner";
 import useUser from "lib/useUser";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { WorkingResponse } from "./api/working";
 
 const Home: NextPage = () => {
   const { user } = useUser({ redirectTo: "/login" });
+  const { data, error } = useSWR<WorkingResponse>(user ? "api/working" : null);
 
-  const [show, setShow] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
@@ -23,8 +27,17 @@ const Home: NextPage = () => {
     return <div>loading...</div>;
   }
 
-  const handleClick = () => {
-    setShow(!show);
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
+  const handleClick = async () => {
+    setLoading(true);
+    await fetch("api/track", {
+      method: "POST",
+      body: JSON.stringify({ date }),
+    });
+    setLoading(false);
+    data.working = !data.working;
   };
 
   const greetings = (date: Date) => {
@@ -64,7 +77,9 @@ const Home: NextPage = () => {
         </h4>
         <h5>Agora são: {nowTime(date)}</h5>
         <div className="grid content-center py-4">
-          {show ? (
+          {loading ? (
+            <Spinner />
+          ) : !data.working ? (
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
               onClick={handleClick}
