@@ -17,7 +17,7 @@ export function Navbar() {
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <a href="https://czar.dev/" className="flex items-center">
           <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-            Ponto Czar+
+            Ponto CZAR+
           </span>
         </a>
         <button
