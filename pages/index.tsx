@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { WorkingResponse } from "./api/working";
+import { ToastContainer, toast } from "react-toastify";
 
 const Home: NextPage = () => {
   const { user } = useUser({ redirectTo: "/login" });
@@ -49,6 +50,7 @@ const Home: NextPage = () => {
     });
     setLoading(false);
     data.working = !data.working;
+    toast.success("Horário registrado com sucesso!");
   };
 
   const greetings = (date: Date) => {
@@ -107,6 +109,7 @@ const Home: NextPage = () => {
           )}
         </div>
       </Layout>
+      <ToastContainer />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import fetchJson from "lib/fetchJson";
 import "styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
