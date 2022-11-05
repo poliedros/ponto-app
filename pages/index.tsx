@@ -2,6 +2,7 @@ import Layout from "components/Layout";
 import { Spinner } from "components/Spinner";
 import useUser from "lib/useUser";
 import type { NextPage } from "next";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { WorkingResponse } from "./api/working";
@@ -27,8 +28,18 @@ const Home: NextPage = () => {
     return <div>loading...</div>;
   }
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (error)
+    return (
+      <Layout>
+        <div>failed to load</div>
+      </Layout>
+    );
+  if (!data)
+    return (
+      <Layout>
+        <Spinner />
+      </Layout>
+    );
 
   const handleClick = async () => {
     setLoading(true);
@@ -71,7 +82,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Layout>
+      <Layout title="PONTO">
         <h4>
           {greetings(new Date())}, {upperCaseFirstLetter(user.username)}
         </h4>

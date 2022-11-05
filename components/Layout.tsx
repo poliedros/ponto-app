@@ -11,10 +11,10 @@ export default function Layout({
   return (
     <>
       <Head>
-        <title>{title ? title : "Czar+"}</title>
+        <title>{title ? `${title} | CZAR+` : "CZAR+"}</title>
         <meta
           name="description"
-          content="Cisab App. Created with ❤ by czar.dev"
+          content="Ponto CZAR+. Created with ❤ by czar.dev"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
