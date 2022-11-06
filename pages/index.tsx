@@ -86,7 +86,7 @@ const Home: NextPage = () => {
     <div>
       <Layout title="PONTO">
         <h4>
-          {greetings(new Date())}, {upperCaseFirstLetter(user.username)}
+          <b>{greetings(new Date())}</b>, {upperCaseFirstLetter(user.username)}
         </h4>
         <h5>Agora são: {nowTime(date)}</h5>
         <div className="grid content-center py-4">
