@@ -44,13 +44,23 @@ const Home: NextPage = () => {
 
   const handleClick = async () => {
     setLoading(true);
-    await fetch("api/track", {
-      method: "POST",
-      body: JSON.stringify({ date }),
-    });
-    setLoading(false);
-    data.working = !data.working;
-    toast.success("Horário registrado com sucesso!");
+    try {
+      const res = await fetch("api/track", {
+        method: "POST",
+        body: JSON.stringify({ date }),
+      });
+
+      if (res.status != 201) {
+        throw new Error("something not good");
+      }
+
+      setLoading(false);
+      data.working = !data.working;
+      toast.success("Horário registrado com sucesso!");
+    } catch (err) {
+      setLoading(false);
+      toast.error("Algo deu errado. Avise ao administrador");
+    }
   };
 
   const greetings = (date: Date) => {

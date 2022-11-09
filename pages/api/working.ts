@@ -29,6 +29,7 @@ async function workingRoute(
     return;
   } catch (err) {
     console.log(err);
+    throw err;
   }
 }
 

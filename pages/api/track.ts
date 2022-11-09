@@ -11,7 +11,6 @@ async function trackRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    console.log(req.body);
     const response = await fetch(`${API_URL}/tracking/track`, {
       method: "POST",
       headers: {
@@ -25,6 +24,7 @@ async function trackRoute(req: NextApiRequest, res: NextApiResponse) {
     return;
   } catch (err) {
     console.log(err);
+    throw err;
   }
 }
 
