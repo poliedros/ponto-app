@@ -2,14 +2,19 @@ import Layout from "components/Layout";
 import { Spinner } from "components/Spinner";
 import useUser from "lib/useUser";
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { WorkingResponse } from "./api/working";
 import { ToastContainer, toast } from "react-toastify";
+import jwt_decode from "jwt-decode";
+import fetchJson from "lib/fetchJson";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const { user } = useUser({ redirectTo: "/login" });
+  const router = useRouter();
+
+  const { user, mutateUser } = useUser({ redirectTo: "/login" });
+
   const { data, error } = useSWR<WorkingResponse>(user ? "api/working" : null);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,6 +32,15 @@ const Home: NextPage = () => {
 
   if (!user || user.isLoggedIn == false) {
     return <div>loading...</div>;
+  }
+
+  const decodedToken = jwt_decode<{ exp: number; iat: number }>(user.token);
+
+  const epochTimeNowInSeconds = Math.round(Date.now() / 1000);
+
+  if (decodedToken.exp < epochTimeNowInSeconds) {
+    mutateUser(fetchJson("/api/logout", { method: "POST" }), false);
+    router.push("/");
   }
 
   if (error)
