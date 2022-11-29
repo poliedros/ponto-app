@@ -35,9 +35,7 @@ const Home: NextPage = () => {
   }
 
   const decodedToken = jwt_decode<{ exp: number; iat: number }>(user.token);
-
   const epochTimeNowInSeconds = Math.round(Date.now() / 1000);
-
   if (decodedToken.exp < epochTimeNowInSeconds) {
     mutateUser(fetchJson("/api/logout", { method: "POST" }), false);
     router.push("/");
