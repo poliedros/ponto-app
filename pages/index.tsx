@@ -108,23 +108,25 @@ const Home: NextPage = () => {
   return (
     <div>
       <Layout title="PONTO">
-        <h4>
-          <b>{greetings(new Date())}</b>, {upperCaseFirstLetter(user.username)}
-        </h4>
-        <h5>Agora são: {nowTime(date)}</h5>
+        <h1 className="font-medium leading-tight text-3xl mt-0 mb-2">
+          {greetings(new Date())}, {upperCaseFirstLetter(user.username)}
+        </h1>
+        <h2 className="font-medium leading-tight text-2xl mt-0 mb-2">
+          Agora são: {nowTime(date)}
+        </h2>
         <div className="grid content-center py-4">
           {loading ? (
             <Spinner />
           ) : !data.working ? (
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full"
               onClick={handleClick}
             >
               Marcar ponto
             </button>
           ) : (
             <button
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
               onClick={handleClick}
             >
               Fechar ponto
