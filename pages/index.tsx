@@ -15,7 +15,11 @@ const Home: NextPage = () => {
 
   const { user, mutateUser } = useUser({ redirectTo: "/login" });
 
-  const { data, error } = useSWR<WorkingResponse>(user ? "api/working" : null);
+  const { data: dataWorking, error: errorWorking } = useSWR<WorkingResponse>(
+    user ? "api/working" : null
+  );
+  const { data: dataStartTime, error: errorStartTime } =
+    useSWR<WorkingResponse>(user ? "api/lasttime" : null);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState(new Date());
@@ -42,13 +46,13 @@ const Home: NextPage = () => {
     return <>Recarregue a pagina.</>;
   }
 
-  if (error)
+  if (errorWorking)
     return (
       <Layout>
         <div>failed to load</div>
       </Layout>
     );
-  if (!data)
+  if (!dataWorking)
     return (
       <Layout>
         <Spinner />
@@ -68,7 +72,7 @@ const Home: NextPage = () => {
       }
 
       setLoading(false);
-      data.working = !data.working;
+      dataWorking.working = !dataWorking.working;
       toast.success("Horário registrado com sucesso!");
     } catch (err) {
       setLoading(false);
@@ -114,10 +118,11 @@ const Home: NextPage = () => {
         <h2 className="font-medium leading-tight text-2xl mt-0 mb-2">
           Agora são: {nowTime(date)}
         </h2>
+
         <div className="grid content-center py-4">
           {loading ? (
             <Spinner />
-          ) : !data.working ? (
+          ) : !dataWorking.working ? (
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full"
               onClick={handleClick}
@@ -125,12 +130,17 @@ const Home: NextPage = () => {
               Marcar ponto
             </button>
           ) : (
-            <button
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-              onClick={handleClick}
-            >
-              Fechar ponto
-            </button>
+            <>
+              <h2 className="font-medium leading-tight text-1xl mt-0 mb-2">
+                O inicio da sua jornada foi ha 4 horas atras.
+              </h2>
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                onClick={handleClick}
+              >
+                Fechar ponto
+              </button>
+            </>
           )}
         </div>
       </Layout>
