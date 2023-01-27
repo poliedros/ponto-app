@@ -9,17 +9,25 @@ import { ToastContainer, toast } from "react-toastify";
 import jwt_decode from "jwt-decode";
 import fetchJson from "lib/fetchJson";
 import { useRouter } from "next/router";
+import { LastStartTimeResponse } from "./api/lasttime";
+
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/pt-br";
+
+dayjs.extend(relativeTime);
+dayjs.locale("pt-br");
 
 const Home: NextPage = () => {
   const router = useRouter();
 
   const { user, mutateUser } = useUser({ redirectTo: "/login" });
 
-  const { data: dataWorking, error: errorWorking } = useSWR<WorkingResponse>(
+  const { data: workingData, error: workingError } = useSWR<WorkingResponse>(
     user ? "api/working" : null
   );
-  const { data: dataStartTime, error: errorStartTime } =
-    useSWR<WorkingResponse>(user ? "api/lasttime" : null);
+  const { data: startTimeData, error: startTimeError } =
+    useSWR<LastStartTimeResponse>(user ? "api/lasttime" : null);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState(new Date());
@@ -46,13 +54,13 @@ const Home: NextPage = () => {
     return <>Recarregue a pagina.</>;
   }
 
-  if (errorWorking)
+  if (workingError)
     return (
       <Layout>
         <div>failed to load</div>
       </Layout>
     );
-  if (!dataWorking)
+  if (!workingData)
     return (
       <Layout>
         <Spinner />
@@ -72,7 +80,7 @@ const Home: NextPage = () => {
       }
 
       setLoading(false);
-      dataWorking.working = !dataWorking.working;
+      workingData.working = !workingData.working;
       toast.success("Horário registrado com sucesso!");
     } catch (err) {
       setLoading(false);
@@ -109,6 +117,11 @@ const Home: NextPage = () => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  function format(date: string | undefined) {
+    if (!date) return "NaN";
+    return dayjs().from(date);
+  }
+
   return (
     <div>
       <Layout title="PONTO">
@@ -122,7 +135,7 @@ const Home: NextPage = () => {
         <div className="grid content-center py-4">
           {loading ? (
             <Spinner />
-          ) : !dataWorking.working ? (
+          ) : !workingData.working ? (
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full"
               onClick={handleClick}
@@ -132,7 +145,7 @@ const Home: NextPage = () => {
           ) : (
             <>
               <h2 className="font-medium leading-tight text-1xl mt-0 mb-2">
-                O inicio da sua jornada foi ha 4 horas atras.
+                O início da sua jornada foi {format(startTimeData?.date)}.
               </h2>
               <button
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
